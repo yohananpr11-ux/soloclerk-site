@@ -1,0 +1,22 @@
+name: Decode OG image
+on:
+  push:
+    paths:
+      - "assets/og.png.b64"
+jobs:
+  decode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode and commit og.png
+        run: |
+          set -euo pipefail
+          base64 -d assets/og.png.b64 > assets/og.png
+          rm assets/og.png.b64
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/og.png assets/og.png.b64
+          git commit -m "Add decoded Open Graph image"
+          git push
